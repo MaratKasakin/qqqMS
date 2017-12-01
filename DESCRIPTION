@@ -9,6 +9,8 @@ License: GPL (>= 3)
 Depends:
     xcms,
     methods
+Imports:
+    MSnbase
 Suggests:
     testthat,
     covr
