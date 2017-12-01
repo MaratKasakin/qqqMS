@@ -21,7 +21,7 @@ Providing these two columns are present; \code{phenoData} can contain as many ot
 a list of two elements
 \itemize{
     \item{values} values for the integrated peak areas of all features detected
-    \item{definitions} a \code{data.frame} of feature defintions. See \link[xcms]{featureDefinitions} for more details
+    \item{definitions} a \code{data.frame} of feature defintions. See \code{\link[xcms]{XCMSnExp-class}} for more details
 }
 }
 \description{

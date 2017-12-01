@@ -13,12 +13,13 @@
 #' @return a list of two elements
 #' \itemize{
 #'     \item{values} values for the integrated peak areas of all features detected
-#'     \item{definitions} a \code{data.frame} of feature defintions. See \link[xcms]{featureDefinitions} for more details
+#'     \item{definitions} a \code{data.frame} of feature defintions. See \code{\link[xcms]{XCMSnExp-class}} for more details
 #' }
 #' @export
 #' @importFrom methods new
-#' @importFrom xcms readMSData MatchedFilterParam findChromPeaks PeakDensityParam groupChromPeaks featureValues featureDefinitions
+#' @importFrom xcms MatchedFilterParam findChromPeaks PeakDensityParam groupChromPeaks featureValues featureDefinitions
 
+#'
 integrate_peaks <- function(files, phenoData)
   {
 
@@ -44,7 +45,7 @@ integrate_peaks <- function(files, phenoData)
 
   pheno_ob <- new('NAnnotatedDataFrame', phenoData)
 
-  xcraw <- readMSData(files, pdata = pheno_ob, mode = 'onDisk')
+  xcraw <- MSnbase::readMSData(files, pdata = pheno_ob, mode = 'onDisk')
 
   matched_filt_params <-
     MatchedFilterParam(
@@ -52,7 +53,7 @@ integrate_peaks <- function(files, phenoData)
       snthresh = 1.0,
       binSize = 0.01,
       steps = 1.0,
-      mzdif = -2.0
+      mzdiff = -2.0
     )
 
   xcpeaks <- findChromPeaks(xcraw, matched_filt_params)
