@@ -67,7 +67,7 @@ integrate_peaks <- function(files, phenoData)
 
   xcgrp <- groupChromPeaks(xcpeaks, param = grp_parmas)
 
-  feature_values <- data.frame(featureValues(xcgrp, value = 'into'))
+  feature_values <- data.frame(featureValues(xcgrp, value = 'into', intensity = 'into'))
 
   feature_def <- data.frame(featureDefinitions(xcgrp))
 
@@ -77,6 +77,6 @@ integrate_peaks <- function(files, phenoData)
   feature_def[, 'mzmax'] <- round(feature_def[, 'mzmax'], digits = 3)
   feature_def[, 'mzmin'] <- round(feature_def[, 'mzmin'], digits = 3)
 
-  return(list(values = feature_values), definitions = feature_def)
+  return(list(values = feature_values, definitions = feature_def))
 
   }
