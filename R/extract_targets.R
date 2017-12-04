@@ -44,8 +44,8 @@ extract_targets <- function(features, targets)
     stop(deparse(substitute(features)),' is not a list of two elements', call. = FALSE)
   }
 
-  deftmp <- features['definitions']
-  valtmp <- features['values']
+  deftmp <- features[['definitions']]
+  valtmp <- features[['values']]
 
   extid <- NULL
   for(i in 1:nrow(targets)){
@@ -53,14 +53,15 @@ extract_targets <- function(features, targets)
     rt <- targets[i, 'rt']
 
     idxf <-
-      which(deftmp[, 'mzmed'] == mz &
-              deftmp[, 'rtmax'] >= (rt - 1.0) & deftmp[, 'rtmin'] <= (rt + 1.0))
+      which(deftmp[,'mzmed'] == mz &
+              deftmp[,'rtmax'] >= (rt - 2.0) & deftmp[,'rtmin'] <= (rt + 2.0))
 
     if(length(idxf) == 0) {
       idxf <- which(deftmp[, 'mzmax'] >= mz & deftmp[, 'mzmin'] <= mz &
-                      deftmp[, 'rtmax'] >= (rt - 1.0) &
-                      deftmp[, 'rtmin'] <= (rt + 1.0))
+                      deftmp[, 'rtmax'] >= (rt - 1.5) &
+                      deftmp[, 'rtmin'] <= (rt + 1.5))
     }
+
     extid[[i]] <- idxf
     }
 
@@ -75,7 +76,12 @@ extract_targets <- function(features, targets)
   tval <- t(target_values)
 
   tval_out <-
-    data.frame(name = rownames(tval), tval, row.names = FALSE)
+    data.frame(
+      name = rownames(tval),
+      tval,
+      row.names = NULL,
+      check.names = FALSE
+    )
 
   return(tval_out)
 }
