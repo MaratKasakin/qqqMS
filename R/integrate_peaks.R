@@ -20,10 +20,9 @@
 #' @importFrom xcms MatchedFilterParam findChromPeaks PeakDensityParam groupChromPeaks featureValues featureDefinitions
 
 #'
-integrate_peaks <- function(files, phenoData)
-  {
-
-  if(length(files) != nrow(phenoData)) {
+integrate_peaks <- function(files, phenoData, polarity)
+{
+  if (length(files) != nrow(phenoData)) {
     stop(
       deparse(substitute(files)),
       ' and ',
@@ -34,18 +33,22 @@ integrate_peaks <- function(files, phenoData)
   }
 
   if (!'fileName' %in% names(phenoData)) {
-    stop('no `fileName` column found in ', deparse(substitute(phenoData)), call. = FALSE)
+    stop('no `fileName` column found in ',
+         deparse(substitute(phenoData)),
+         call. = FALSE)
   }
 
   if (!'name' %in% names(phenoData)) {
     stop('no `name` column found in ', deparse(substitute(phenoData)), call. = FALSE)
   }
 
-  phenoData <- data.frame(phenoData, group = rep(1, nrow(phenoData)))
+  phenoData <-
+    data.frame(phenoData, group = rep(1, nrow(phenoData)))
 
   pheno_ob <- new('NAnnotatedDataFrame', phenoData)
 
-  xcraw <- MSnbase::readMSData(files, pdata = pheno_ob, mode = 'onDisk')
+  xcraw <-
+    MSnbase::readMSData(files, pdata = pheno_ob, mode = 'onDisk')
 
   matched_filt_params <-
     MatchedFilterParam(
@@ -55,6 +58,23 @@ integrate_peaks <- function(files, phenoData)
       steps = 1.0,
       mzdiff = -2.0
     )
+
+
+  # polarity check
+
+  plen <- length(unique(xcraw@featureData@data$polarity))
+
+  if (plen == 2) {
+    xcraw <- split(xcraw, xcraw@featureData@data$polarity)
+
+    if (polarity == '-1') {
+      xcraw <- xcraw$`-1`
+    }
+
+    if (polarity == '1') {
+      xcraw <- xcraw$`1`
+    }
+  }
 
   xcpeaks <- findChromPeaks(xcraw, matched_filt_params)
 
@@ -67,16 +87,21 @@ integrate_peaks <- function(files, phenoData)
 
   xcgrp <- groupChromPeaks(xcpeaks, param = grp_parmas)
 
-  feature_values <- data.frame(featureValues(xcgrp, value = 'into', intensity = 'into'))
+  feature_values <-
+    data.frame(featureValues(xcgrp, value = 'into', intensity = 'into'))
 
   feature_def <- data.frame(featureDefinitions(xcgrp))
 
-  feature_def[, 'mzmed'] <- round(feature_def[, 'mzmed'], digits = 3)
+  feature_def[, 'mzmed'] <-
+    round(feature_def[, 'mzmed'], digits = 3)
   feature_def[, 'rt'] <- round(feature_def[, 'rtmed'], digits = 1)
 
-  feature_def[, 'mzmax'] <- round(feature_def[, 'mzmax'], digits = 3)
-  feature_def[, 'mzmin'] <- round(feature_def[, 'mzmin'], digits = 3)
+  feature_def[, 'mzmax'] <-
+    round(feature_def[, 'mzmax'], digits = 3)
+  feature_def[, 'mzmin'] <-
+    round(feature_def[, 'mzmin'], digits = 3)
 
   return(list(values = feature_values, definitions = feature_def))
 
-  }
+}
+
