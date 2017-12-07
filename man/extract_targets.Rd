@@ -20,5 +20,5 @@ extract_targets(features, targets)
 a \code{data.frame} of feature values for only those which corresponds to an identified target
 }
 \description{
-Extract Targets
+Use a user-defined list of MRM-MR targets to create a filtered feature values matrix
 }

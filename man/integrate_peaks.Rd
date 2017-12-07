@@ -4,7 +4,7 @@
 \alias{integrate_peaks}
 \title{Detect and integrate MRM-MS features}
 \usage{
-integrate_peaks(files, phenoData)
+integrate_peaks(files, phenoData, pol)
 }
 \arguments{
 \item{files}{a character vector of \code{.mzML} files which have been convereted from MRM-MS \code{.mzML} to LC-MS style \code{.mzML} files using \code{MRMConverteR}}
@@ -16,6 +16,8 @@ integrate_peaks(files, phenoData)
 }
 
 Providing these two columns are present; \code{phenoData} can contain as many other columns as the user wishes.}
+
+\item{pol}{a charatcer string of either \code{1} for positive mode or \code{-1} for negative mode. If input data only contains one polarity mode, then \code{polarity} can be \code{NULL}}
 }
 \value{
 a list of two elements
@@ -25,5 +27,5 @@ a list of two elements
 }
 }
 \description{
-Detect and integrate MRM-MS features
+Use the \code{matchedFilter} algorithim \code{xcms} for feature detection in MRM-MS which have been converted to LC-MS style \code{.mzML} files.
 }
