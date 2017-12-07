@@ -18,7 +18,7 @@
 #' }
 #' @export
 #' @importFrom methods new
-#' @importFrom xcms MatchedFilterParam findChromPeaks PeakDensityParam groupChromPeaks featureValues featureDefinitions
+#' @importFrom xcms MatchedFilterParam findChromPeaks PeakDensityParam groupChromPeaks featureValues featureDefinitions ObiwarpParam adjustRtime
 
 #'
 integrate_peaks <- function(files, phenoData, pol)
