@@ -1,6 +1,6 @@
 context('qqqMS')
 
-testthat('qqqMS-extract',{
+test_that('qqqMS-extract',{
 
   example_files <-
     list.files(system.file(
@@ -22,7 +22,9 @@ testthat('qqqMS-extract',{
       stringsAsFactors = FALSE
     )
 
-  int_res <- integrate_peaks(example_files, example_pheno)
+  example_targets <- example_targets[which(example_targets$polarity == '1'),]
+
+  int_res <- integrate_peaks(example_files, example_pheno, pol = '1')
 
   targ_res <- extract_targets(int_res, example_targets)
 
