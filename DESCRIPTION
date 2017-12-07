@@ -4,7 +4,7 @@ Title: Peak Detection for MRM-MS data
 Version: 0.0.99
 Author: Tom Wilson <tpw2@aber.ac.uk>
 Maintainer: Tom Wilson <tpw2@aber.ac.uk>
-Description: Simple wrappers for using post-acquistion processing of Multiple Reaction Monitoring (MRM) Mass Spectrometry (MS) data using xcms.
+Description: Simple wrappers for post-acquistion processing of Multiple Reaction Monitoring (MRM) Mass Spectrometry (MS) data using xcms.
 License: GPL (>= 3)
 Depends:
     xcms,
