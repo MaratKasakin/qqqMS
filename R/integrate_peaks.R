@@ -1,5 +1,6 @@
 #' Detect and integrate MRM-MS features
 #'
+#' Use the \code{matchedFilter} algorithim \code{xcms} for feature detection in MRM-MS which have been converted to LC-MS style \code{.mzML} files.
 #'
 #' @param files a character vector of \code{.mzML} files which have been convereted from MRM-MS \code{.mzML} to LC-MS style \code{.mzML} files using \code{MRMConverteR}
 #' @param phenoData a \code{data.frame}. \code{phenoData} must contain the following columns;
@@ -9,7 +10,7 @@
 #' }
 #'
 #' Providing these two columns are present; \code{phenoData} can contain as many other columns as the user wishes.
-#'
+#' @param pol a charatcer string of either \code{1} for positive mode or \code{-1} for negative mode. If input data only contains one polarity mode, then \code{polarity} can be \code{NULL}
 #' @return a list of two elements
 #' \itemize{
 #'     \item{values} values for the integrated peak areas of all features detected
@@ -20,7 +21,7 @@
 #' @importFrom xcms MatchedFilterParam findChromPeaks PeakDensityParam groupChromPeaks featureValues featureDefinitions
 
 #'
-integrate_peaks <- function(files, phenoData, polarity)
+integrate_peaks <- function(files, phenoData, pol)
 {
   if (length(files) != nrow(phenoData)) {
     stop(
@@ -52,13 +53,13 @@ integrate_peaks <- function(files, phenoData, polarity)
 
   matched_filt_params <-
     MatchedFilterParam(
-      fwhm = 30,
-      snthresh = 1.0,
+      fwhm = 40,
+      snthresh = 1,
       binSize = 0.01,
-      steps = 1.0,
-      mzdiff = -2.0
+      steps = 1,
+      mzdiff = -2,
+      max = 5
     )
-
 
   # polarity check
 
@@ -67,22 +68,24 @@ integrate_peaks <- function(files, phenoData, polarity)
   if (plen == 2) {
     xcraw <- split(xcraw, xcraw@featureData@data$polarity)
 
-    if (polarity == '-1') {
+    if (pol == '-1') {
       xcraw <- xcraw$`-1`
     }
 
-    if (polarity == '1') {
+    if (pol == '1') {
       xcraw <- xcraw$`1`
     }
   }
 
   xcpeaks <- findChromPeaks(xcraw, matched_filt_params)
 
+  #xdata <- adjustRtime(xcpeaks, param = ObiwarpParam(binSize = 0.01))
+
   grp_parmas <- PeakDensityParam(
     sampleGroups = xcpeaks$group,
     minFraction = 0.1,
-    bw = 30,
-    binSize = 0.01
+    bw = 60,
+    binSize = 0.05
   )
 
   xcgrp <- groupChromPeaks(xcpeaks, param = grp_parmas)
@@ -104,4 +107,3 @@ integrate_peaks <- function(files, phenoData, polarity)
   return(list(values = feature_values, definitions = feature_def))
 
 }
-
