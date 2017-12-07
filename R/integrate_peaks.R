@@ -44,7 +44,7 @@ integrate_peaks <- function(files, phenoData, pol)
   }
 
   phenoData <-
-    data.frame(phenoData, group = rep(1, nrow(phenoData)))
+    data.frame(phenoData, sample_group = rep(1, nrow(phenoData)))
 
   pheno_ob <- new('NAnnotatedDataFrame', phenoData)
 
@@ -79,14 +79,15 @@ integrate_peaks <- function(files, phenoData, pol)
 
   xcpeaks <- findChromPeaks(xcraw, matched_filt_params)
 
-  #xdata <- adjustRtime(xcpeaks, param = ObiwarpParam(binSize = 0.01))
+  xcpeaks <- adjustRtime(xcpeaks, param = ObiwarpParam(binSize = 0.01))
 
   grp_parmas <- PeakDensityParam(
-    sampleGroups = xcpeaks$group,
+    sampleGroups = xcpeaks$sample_group,
     minFraction = 0.1,
     bw = 60,
     binSize = 0.05
   )
+
 
   xcgrp <- groupChromPeaks(xcpeaks, param = grp_parmas)
 

@@ -59,11 +59,15 @@ extract_targets <- function(features, targets)
       idxf <- which(deftmp[, 'mzmax'] >= mz & deftmp[, 'mzmin'] <= mz &
                       deftmp[, 'rtmax'] >= (rt - 1.5) &
                       deftmp[, 'rtmin'] <= (rt + 1.5))
+
     }
+      if (length(idxf) == 0) {
+        idxf <- NA
+      }
 
     extid[[i]] <- idxf
-  }
 
+}
 
   targets_tmp <- data.frame(targets, id = rownames(deftmp)[extid])
 
