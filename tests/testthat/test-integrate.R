@@ -1,4 +1,4 @@
-context('qqqMS')
+context('qqqMS-integrate')
 
 test_that('qqqMS-integrate',{
 
@@ -23,7 +23,7 @@ test_that('qqqMS-integrate',{
   expect_error(integrate_peaks(example_files, example_pheno[1:2,]))
   expect_error(integrate_peaks(example_files[1:2], example_pheno))
 
-  int_res <- integrate_peaks(example_files, example_pheno, pol = '1')
+  qqq_ms_peaks <- integrate_peaks(example_files, example_pheno, pol = '1')
 
   expect_true(is.list(qqq_ms_peaks))
   expect_true(length(qqq_ms_peaks) == 2)

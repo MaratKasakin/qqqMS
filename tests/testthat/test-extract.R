@@ -1,4 +1,4 @@
-context('qqqMS')
+context('qqqMS-extract')
 
 test_that('qqqMS-extract',{
 
@@ -33,7 +33,7 @@ test_that('qqqMS-extract',{
   expect_true(is.data.frame(targ_res))
   expect_true(names(targ_res)[1] == 'name')
 
-  expect_true(all(targets[,'name'] %in% names(targ_res)))
+  expect_true(all(example_targets[,'name'] %in% names(targ_res)))
 
   }
 )
